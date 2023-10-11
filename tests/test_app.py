@@ -3,28 +3,6 @@ from playwright.sync_api import Page, expect
 # Tests for your routes go here
 
 # Test-drive a GET /albums route that connects with an AlbumRepository and the database to return a result like this:
-
-# <!-- GET /albums -->
-
-# <html>
-#   <head></head>
-#   <body>
-#     <h1>Albums</h1>
-
-#     <div>
-#       Title: Doolittle
-#       Released: 1989
-#     </div>
-
-#     <div>
-#       Title: Surfer Rosa
-#       Released: 1988
-#     </div>
-
-#     <!-- ... -->
-#   </body>
-# </html>
-
 """
 Test GET /albums returns HTML header tag
 """
