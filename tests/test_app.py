@@ -2,6 +2,58 @@ from playwright.sync_api import Page, expect
 
 # Tests for your routes go here
 
+# Test-drive a GET /albums route that connects with an AlbumRepository and the database to return a result like this:
+
+# <!-- GET /albums -->
+
+# <html>
+#   <head></head>
+#   <body>
+#     <h1>Albums</h1>
+
+#     <div>
+#       Title: Doolittle
+#       Released: 1989
+#     </div>
+
+#     <div>
+#       Title: Surfer Rosa
+#       Released: 1988
+#     </div>
+
+#     <!-- ... -->
+#   </body>
+# </html>
+
+"""
+Test GET /albums returns HTML header tag
+"""
+def test_get_albums_returns_html_header(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f'http://{test_web_address}/albums')
+
+    h1_tag = page.locator('h1')
+    expect(h1_tag).to_have_text('Albums')
+
+
+
+"""
+Test GET /albums returns HTML dividers
+"""
+def test_get_albums_returns_html_albums(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f'http://{test_web_address}/albums')
+
+    h1_tag = page.locator('div')
+    expect(h1_tag).to_have_text([
+        'Title: Doolittle\nReleased: 1989',
+        'Title: Surfer Rosa\nReleased: 1988'
+    ])
+
+
+
+
+
 # === Example Code Below ===
 
 """

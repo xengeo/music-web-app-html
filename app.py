@@ -1,12 +1,60 @@
 import os
 from flask import Flask, request, render_template
 from lib.database_connection import get_flask_database_connection
+from lib.album import Album
+from lib.album_repository import AlbumRepository
+from lib.artist import Artist
+from lib.artist_repository import ArtistRepository
 
 # Create a new Flask app
 app = Flask(__name__)
 
 # == Your Routes Here ==
 
+# == Your Routes Here ==
+@app.route('/albums', methods=['POST', 'GET'])
+def albums():
+
+    connection = get_flask_database_connection(app)
+    repository = AlbumRepository(connection)
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        release_year = request.form.get('release_year')
+        artist_id = request.form.get('artist_id')
+
+        new_album = Album(None, title, release_year, artist_id)
+        repository.create(new_album)
+        return ''
+    
+    if request.method == 'GET':
+        albums = repository.all()
+        return render_template('albums.html', albums=albums)
+
+@app.route('/artists', methods=['GET', 'POST'])
+def artists():
+
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    
+    # GET REQUEST
+    if request.method == 'GET':
+        artists = repository.all()
+        return ', '.join(artist.name for artist in artists)
+
+    # POST REQUEST
+    if request.method == 'POST':
+        
+        if 'name' not in request.form or 'genre' not in request.form:
+            return 'You must provide an artist name and genre parameter', 400
+
+        name = request.form['name']
+        genre = request.form['genre']
+
+        new_artist = Artist(None, name, genre)
+        repository.create(new_artist)
+
+        return ''
 
 # == Example Code Below ==
 
