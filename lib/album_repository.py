@@ -31,6 +31,21 @@ class AlbumRepository:
         return Album(row['id'], row['title'],
                          row['release_year'], row['artist_id'])
     
+    def get_with_artist(self, album_id):
+
+        query = """
+        SELECT *
+        FROM albums
+        JOIN artists
+        on albums.artist_id = artists.id
+        where albums.id = %s
+        """
+
+        rows = self._connection.execute(query, [album_id])
+        row = rows[0]
+        return Album(row['id'], row['title'], row['release_year'], row['artist_id'], row['name'])
+
+
     def create(self, new_album):
         """insert a new album into Albums table"""
         self._connection.execute(

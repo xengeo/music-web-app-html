@@ -14,7 +14,6 @@ def test_get_albums_returns_html_header(page, test_web_address, db_connection):
     expect(h1_tag).to_have_text('Albums')
 
 
-
 """
 Test GET /albums returns HTML dividers
 """
@@ -29,8 +28,19 @@ def test_get_albums_returns_html_albums(page, test_web_address, db_connection):
     ])
 
 
+#GET /albums/1
+"""
+Test GET /albums/1 with specific album id
+Return HTML with info for single album
+"""
+def test_get_album_with_id(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f'http://{test_web_address}/albums/1')
+    h1_tag = page.locator('h1')
+    expect(h1_tag).to_have_text("Doolittle")
 
-
+    p_tag = page.locator('p')
+    expect(p_tag).to_have_text("Release year: 1989 Artist: Pixies")
 
 # === Example Code Below ===
 

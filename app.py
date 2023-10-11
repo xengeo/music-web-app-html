@@ -10,8 +10,14 @@ from lib.artist_repository import ArtistRepository
 app = Flask(__name__)
 
 # == Your Routes Here ==
+@app.route('/albums/<id>', methods=['GET'])
+def single_album(id):
+    connection = get_flask_database_connection(app)
+    repository = AlbumRepository(connection)
+    album = repository.get_with_artist(id)
+    return render_template('album.html', album=album) # have to specify arg name i.e. like keyword arg
 
-# == Your Routes Here ==
+
 @app.route('/albums', methods=['POST', 'GET'])
 def albums():
 

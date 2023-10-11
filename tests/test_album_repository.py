@@ -106,3 +106,15 @@ def test_delete_nonexistent_album_raises_error(db_connection):
     with pytest.raises(Exception) as err:
         repository.delete(20)
     assert str(err.value) == "Album ID not found"
+
+
+"""
+Test get_with_artist returns album object with artist attribute
+"""
+def test_get_with_artist(db_connection):
+    db_connection.seed("seeds/music_library.sql")
+    repository = AlbumRepository(db_connection)
+    album = repository.get_with_artist(1)
+    print(album.artist_name)
+    assert album.artist_name == "Pixies"
+    assert str(album) == "Album(1, Doolittle, 1989, 1, Pixies)"
