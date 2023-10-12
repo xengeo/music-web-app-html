@@ -3,7 +3,6 @@ import pytest
 from lib.album_repository import AlbumRepository
 from lib.album import Album
 
-
 """
 test when we call AlbumRepository#all
 We get a list of Artist objects reflecting the seed data
@@ -57,6 +56,7 @@ def test_create_can_insert_to_albums_table(db_connection):
 
     new_album = Album(None, 'New Album Title', 2023, 2)
     repository.create(new_album)
+    assert new_album.id == 13
 
     album = repository.find(13)
     assert album == Album(13, 'New Album Title', 2023, 2)

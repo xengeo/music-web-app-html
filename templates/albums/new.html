@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Album</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <h1>Add A New Album</h1>
+
+    <p class="t-errors"> {{ errors }}</p>
+    <form action="/albums" method="POST">
+        <p>
+            <label for="title">Title</label>
+            <br>
+            <input type="text" name="title" id="title">
+        </p>
+        <p>
+            <label for="year">Release Year</label>
+            <br>
+            <input type="number" name="release_year" id="year">
+        </p>
+        <p>
+            <input type="submit" value="Add Album">
+        </p>
+    </form>
+    </p>
+</body>
+
+</html>

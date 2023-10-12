@@ -11,11 +11,14 @@
   <p>Click on each artist for more information</p>
   <ol>
     {% for artist in artists %}
-      <li>
-        <a href="/artists/{{ artist.id }}">{{ artist.name }}</a>
-      </li>
+    <li>
+      <a href="/artists/{{ artist.id }}">{{ artist.name }}</a>
+    </li>
     {% endfor %}
   </ol>
+  <form action="/artists/new" method="GET">
+    <input type="submit" value="Add Artist">
+  </form>
 </body>
 
 </html>

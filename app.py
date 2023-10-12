@@ -1,16 +1,24 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
 from lib.album import Album
 from lib.album_repository import AlbumRepository
 from lib.artist import Artist
 from lib.artist_repository import ArtistRepository
+from lib.album_parameter_validator import is_valid
 
 # Create a new Flask app
 app = Flask(__name__)
 
 # == Your Routes Here ==
-@app.route('/albums/<id>', methods=['GET'])
+
+# ========= ALBUMS ==========
+@app.route('/albums/new', methods=['GET']) # GET is the default
+def get_album_new():
+    return render_template("albums/new.html")    
+
+
+@app.route('/albums/<int:id>', methods=['GET'])
 def single_album(id):
     connection = get_flask_database_connection(app)
     repository = AlbumRepository(connection)
@@ -26,13 +34,18 @@ def albums():
 
     # POST REQUEST
     if request.method == 'POST':
-        title = request.form.get('title')
-        release_year = request.form.get('release_year')
-        artist_id = request.form.get('artist_id')
 
-        new_album = Album(None, title, release_year, artist_id)
+        title = request.form['title']
+        release_year = request.form['release_year']
+
+        new_album = Album(None, title, release_year, 2)
+
+        if not is_valid(new_album):
+            return render_template("albums/new.html", errors="Album title and/or release year inputs were invalid")
+        
         repository.create(new_album)
-        return ''
+
+        return redirect(f"/albums/{new_album.id}")
     
     # GET REQUEST
     if request.method == 'GET':
@@ -40,13 +53,18 @@ def albums():
         return render_template('albums/index.html', albums=albums)
 
 
-@app.route('/artists/<id>', methods=['GET'])
+# ========= ARTISTS ==========
+@app.route('/artists/new', methods=['GET']) # GET is the default
+def get_artist_new():
+    return render_template("artists/new.html")  
+
+
+@app.route('/artists/<int:id>', methods=['GET'])
 def single_artist(id):
     connection = get_flask_database_connection(app)
     repository = ArtistRepository(connection)
     artist = repository.find(id)
     return render_template('artists/show.html', artist=artist) # have to specify arg name i.e. like keyword arg
-
 
 
 @app.route('/artists', methods=['GET', 'POST'])
@@ -63,16 +81,17 @@ def artists():
     # POST REQUEST
     if request.method == 'POST':
         
-        if 'name' not in request.form or 'genre' not in request.form:
-            return 'You must provide an artist name and genre parameter', 400
-
         name = request.form['name']
         genre = request.form['genre']
 
-        new_artist = Artist(None, name, genre)
-        repository.create(new_artist)
+        artist = Artist(None, name, genre)
 
-        return ''
+        # if not is_valid(new_album):
+        #     return render_template("albums/new.html", errors="Album title and/or release year inputs were invalid")
+        
+        repository.create(artist)
+        print(artist)
+        return redirect(f"/artists/{artist.id}")
 
 
 

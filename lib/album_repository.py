@@ -48,10 +48,15 @@ class AlbumRepository:
 
     def create(self, new_album):
         """insert a new album into Albums table"""
-        self._connection.execute(
-            'INSERT INTO albums (title, release_year, artist_id) VALUES (%s, %s, %s)', 
-            [new_album.title, new_album.release_year, new_album.artist_id]
-            )
+        
+        rows = self._connection.execute(
+                'INSERT INTO albums (title, release_year, artist_id) VALUES (%s, %s, %s) RETURNING id', 
+                [new_album.title, new_album.release_year, new_album.artist_id]
+                )
+        
+        row = rows[0]
+        new_album.id = row['id']
+
         return None
     
     def delete(self, id):

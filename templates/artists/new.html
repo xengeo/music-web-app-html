@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Artist</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <h1>Add A New Artist</h1>
+
+    <p class="t-errors"> {{ errors }}</p>
+    <form action="/artists" method="POST">
+        <p>
+            <label for="name">Name</label>
+            <br>
+            <input type="text" name="name" id="name">
+        </p>
+        <p>
+            <label for="genre">Genre</label>
+            <br>
+            <input type="text" name="genre" id="genre">
+        </p>
+        <p>
+            <input type="submit" value="Add Artist">
+        </p>
+    </form>
+    </p>
+</body>
+
+</html>

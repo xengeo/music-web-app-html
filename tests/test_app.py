@@ -146,15 +146,96 @@ def test_get_artists_navigate_to_artist_page_and_back(page, test_web_address, db
         "Pixies", "ABBA", "Taylor Swift", "Nina Simone"
     ])
 
+# Phase 3 Section 4 - Exercise:
+
+    # Test-drive and implement a form page to add a new album.
+
+    # You should then be able to use the form in your web browser to 
+    # add a new album, and see this new album in the albums list page.
+"""
+Test GET /album/new to present a form, check for input elements
+And then check a new album can be added, showing new album page.
+"""
+# add Add New Album button to homepage
+# create GET /albums/new page with form
+# redirect to new album page (route exists (GET /album/<int:id>))
+def test_create_new_album(db_connection, page, test_web_address):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/albums")
+    page.click("text=Add Album")
+    # Goes to GET /albums/new
+    # locate element to test
+    h1_tag = page.locator("h1")
+    expect(h1_tag).to_have_text("Add A New Album")
+    # Fill the form
+    page.fill("input[name=title]", "Test Album Name")
+    page.fill("input[name=release_year]", '2023')
+    page.click("text=Add Album")
+    # Form parameters are validated and a new album created, 
+    # then direct to GET /albums/<id>
+    h1_tag = page.locator('h1')
+    expect(h1_tag).to_have_text("Test Album Name")
+    p_tag = page.locator('.t-year-artist')
+    expect(p_tag).to_have_text("Release year: 2023 Artist: ABBA")
+
+"""
+Test when an invalid album is added
+We get errors back
+"""
+def test_invaldi_album_added_return_errors(db_connection, page, test_web_address):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/albums")
+    page.click("text=Add Album")
+    page.click("text=Add Album")
+    errors = page.locator(".t-errors")
+    expect(errors).to_have_text("Album title and/or release year inputs were invalid")
+
+
+# Phase 3 Section 4 - Challenge:
+
+# Test-drive and implement a form page to add a new artist.
+
+# You should then be able to use the form in your web browser 
+# to add a new artist, and see this new artist in the artists list page.
+
+"""
+Test GET /artist/new to present a form, check for input elements
+And then check a new artist can be added, showing new artist page.
+"""
+# add Add New artist button to homepage
+# create GET /artists/new page with form
+# redirect to new artist page (route exists (GET /artists/<int:id>))
+def test_create_new_artist(db_connection, page, test_web_address):
+    db_connection.seed('seeds/music_library.sql')
+    page.goto(f"http://{test_web_address}/artists")
+    page.click("text=Add Artist")
+    # Goes to GET /albums/new
+    # locate element to test
+    h1_tag = page.locator("h1")
+    expect(h1_tag).to_have_text("Add A New Artist")
+    # Fill the form
+    page.fill("input[name=name]", "Test Artist Name")
+    page.fill("input[name=genre]", 'Test Genre')
+    page.click("text=Add Artist")
+    # then direct to GET /artists/<id>
+    h1_tag = page.locator('h1')
+    expect(h1_tag).to_have_text("Test Artist Name")
+    p_tag = page.locator('.t-genre')
+    expect(p_tag).to_have_text("Genre: Test Genre")
 
 
 
-
-
-
-
-
-
+# """
+# Test when an invalid artist is added
+# We get errors back
+# """
+# def test_invaldi_artist_added_return_errors(db_connection, page, test_web_address):
+#     db_connection.seed('seeds/music_library.sql')
+#     page.goto(f"http://{test_web_address}/artists")
+#     page.click("text=Add Artist")
+#     page.click("text=Add Artist")
+#     errors = page.locator(".t-errors")
+#     expect(errors).to_have_text("Artist name and/or genre year inputs were invalid")
 
 # === Example Code Below ===
 
