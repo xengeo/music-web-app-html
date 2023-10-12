@@ -6,9 +6,12 @@
   </head>
   <body>
     <h1>{{ album.title }}</h1>
-    <p>
-      Release year: {{ album.release_year }}
+    <p class="t-year-artist">
+      Release year: {{ album.release_year }}<br>
       Artist: {{ album.artist_name }}
+    </p>
+    <p>
+      <a href="/albums">Back to all albums</a>
     </p>
   </body>
 </html>

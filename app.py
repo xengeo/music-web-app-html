@@ -15,7 +15,7 @@ def single_album(id):
     connection = get_flask_database_connection(app)
     repository = AlbumRepository(connection)
     album = repository.get_with_artist(id)
-    return render_template('album.html', album=album) # have to specify arg name i.e. like keyword arg
+    return render_template('albums/show.html', album=album) # have to specify arg name i.e. like keyword arg
 
 
 @app.route('/albums', methods=['POST', 'GET'])
@@ -24,6 +24,7 @@ def albums():
     connection = get_flask_database_connection(app)
     repository = AlbumRepository(connection)
 
+    # POST REQUEST
     if request.method == 'POST':
         title = request.form.get('title')
         release_year = request.form.get('release_year')
@@ -33,9 +34,20 @@ def albums():
         repository.create(new_album)
         return ''
     
+    # GET REQUEST
     if request.method == 'GET':
         albums = repository.all()
-        return render_template('albums.html', albums=albums)
+        return render_template('albums/index.html', albums=albums)
+
+
+@app.route('/artists/<id>', methods=['GET'])
+def single_artist(id):
+    connection = get_flask_database_connection(app)
+    repository = ArtistRepository(connection)
+    artist = repository.find(id)
+    return render_template('artists/show.html', artist=artist) # have to specify arg name i.e. like keyword arg
+
+
 
 @app.route('/artists', methods=['GET', 'POST'])
 def artists():
@@ -46,7 +58,7 @@ def artists():
     # GET REQUEST
     if request.method == 'GET':
         artists = repository.all()
-        return ', '.join(artist.name for artist in artists)
+        return render_template('artists/index.html', artists=artists)
 
     # POST REQUEST
     if request.method == 'POST':
@@ -61,6 +73,19 @@ def artists():
         repository.create(new_artist)
 
         return ''
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # == Example Code Below ==
 
